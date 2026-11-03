@@ -33,7 +33,6 @@ $button = ast_link( 'announce_button', ast_field( 'announce_label' ), '#contact'
 		);
 		?>
 		<span class="band__line band__line--top" aria-hidden="true"></span>
-		<span class="band__line band__line--bottom" aria-hidden="true"></span>
 	</figure>
 
 	<div class="announcement__content">

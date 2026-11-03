@@ -25,7 +25,7 @@ $status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry']
 
 	<div class="contact__intro">
 		<h2 id="contact-heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'contact_heading' ); ?></h2>
-		<p class="contact__lead" data-reveal style="--i:1"><?php echo esc_html( ast_field( 'contact_intro' ) ); ?></p>
+		<div class="contact__lead" data-reveal style="--i:1"><?php echo ast_rich_text( 'contact_intro' ); ?></div>
 	</div>
 
 	<div class="contact__form" data-reveal style="--i:2">

@@ -52,6 +52,7 @@ function ast_ensure_cf7_form() {
 
 	$stored = get_option( 'ast_cf7_form_id' );
 	if ( $stored && 'publish' === get_post_status( (int) $stored ) ) {
+		ast_cf7_apply_flamingo_settings( (int) $stored );
 		return;
 	}
 
@@ -69,6 +70,7 @@ function ast_ensure_cf7_form() {
 	if ( $existing ) {
 		update_option( 'ast_cf7_form_id', $existing[0]->ID, false );
 		update_option( 'ast_cf7_shortcode', ast_cf7_shortcode_from_post( $existing[0]->ID ), false );
+		ast_cf7_apply_flamingo_settings( (int) $existing[0]->ID );
 		return;
 	}
 
@@ -95,6 +97,7 @@ function ast_ensure_cf7_form() {
 	$properties['messages']['invalid_required'] = 'Please fill in this field.';
 	$properties['messages']['invalid_email']    = 'Please enter a valid email address.';
 	$properties['messages']['spam']             = 'Sorry, your enquiry could not be sent. Please try again or email us directly.';
+	$properties['additional_settings']          = ast_cf7_flamingo_additional_settings();
 
 	$form->set_properties( $properties );
 	$post_id = $form->save();
@@ -118,6 +121,79 @@ function ast_cf7_shortcode_from_post( $post_id ) {
 		}
 	}
 	return sprintf( '[contact-form-7 id="%s" title="Investment enquiry"]', $hash );
+}
+
+/**
+ * Additional settings Flamingo reads for the inbound Subject and From columns.
+ *
+ * From is built as "name <email>", so it needs both flamingo_name and flamingo_email.
+ *
+ * @return string
+ */
+function ast_cf7_flamingo_additional_settings() {
+	return implode(
+		"\n",
+		array(
+			'flamingo_subject: "Investment enquiry — [full-name]"',
+			'flamingo_name: "[full-name]"',
+			'flamingo_email: "[email-address]"',
+		)
+	);
+}
+
+/**
+ * Add the Flamingo mappings when the form does not already define them.
+ *
+ * @param int $post_id Contact form ID.
+ */
+function ast_cf7_apply_flamingo_settings( $post_id ) {
+	$form = WPCF7_ContactForm::get_instance( $post_id );
+	if ( ! $form ) {
+		return;
+	}
+
+	$properties = $form->get_properties();
+	$current    = isset( $properties['additional_settings'] ) ? (string) $properties['additional_settings'] : '';
+	$merged     = ast_cf7_merge_flamingo_settings( $current );
+
+	if ( $merged === $current ) {
+		return;
+	}
+
+	$properties['additional_settings'] = $merged;
+	$form->set_properties( $properties );
+	$form->save();
+}
+
+/**
+ * Append any missing flamingo_* lines without replacing settings already saved.
+ *
+ * @param string $existing Additional settings text.
+ * @return string
+ */
+function ast_cf7_merge_flamingo_settings( $existing ) {
+	$lines   = preg_split( '/\r\n|\r|\n/', ast_cf7_flamingo_additional_settings() );
+	$missing = array();
+
+	foreach ( $lines as $line ) {
+		if ( ! preg_match( '/^([a-zA-Z0-9_]+)[\t ]*:/', $line, $matches ) ) {
+			continue;
+		}
+		if ( ! preg_match( '/^' . preg_quote( $matches[1], '/' ) . '[\t ]*:/m', $existing ) ) {
+			$missing[] = $line;
+		}
+	}
+
+	if ( ! $missing ) {
+		return $existing;
+	}
+
+	$existing = rtrim( $existing );
+	if ( '' === $existing ) {
+		return implode( "\n", $missing );
+	}
+
+	return $existing . "\n" . implode( "\n", $missing );
 }
 
 /**

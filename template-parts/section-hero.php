@@ -48,9 +48,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="container hero__content">
-		<p class="hero__eyebrow" data-reveal data-reveal-on="load" style="--i:0"><?php echo esc_html( ast_field( 'hero_eyebrow' ) ); ?></p>
+		<p class="hero__eyebrow" data-reveal data-reveal-on="load" style="--i:0"><?php echo ast_inline_html( 'hero_eyebrow' ); ?></p>
 		<h1 id="hero-heading"><?php echo ast_highlight( 'hero_heading' ); ?></h1>
-		<div class="hero__body" data-reveal data-reveal-on="load" style="--i:1"><?php echo ast_text_br( 'hero_body' ); ?></div>
+		<div class="hero__body" data-reveal data-reveal-on="load" style="--i:1"><?php echo ast_rich_text( 'hero_body' ); ?></div>
 		<a class="btn-round hero__scroll" href="#announcement" aria-label="<?php esc_attr_e( 'Scroll to next section', 'alpha-solar' ); ?>" data-reveal data-reveal-on="load" style="--i:2">
 			<?php echo ast_chevron_svg(); ?>
 		</a>

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AST_VERSION', '1.0.5' );
+define( 'AST_VERSION', '1.0.9' );
 define( 'AST_DIR', get_template_directory() );
 define( 'AST_URI', get_template_directory_uri() );
 

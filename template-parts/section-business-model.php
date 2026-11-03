@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="business__grid">
 		<div class="business__copy">
 			<h2 id="business-heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'business_heading' ); ?></h2>
-			<div class="business__body" data-reveal style="--i:1"><?php echo ast_paragraphs( 'business_body' ); ?></div>
+			<div class="business__body" data-reveal style="--i:1"><?php echo ast_rich_text( 'business_body' ); ?></div>
 		</div>
 		<figure class="business__media" data-reveal style="--i:2">
 			<?php

@@ -18,11 +18,10 @@ $count  = max( 1, count( $ids ) );
 	<h2 id="licensing-heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'licensing_heading' ); ?></h2>
 
 	<div class="carousel" data-carousel data-count="<?php echo esc_attr( (string) ( $ids ? count( $ids ) : 1 ) ); ?>" aria-roledescription="carousel" aria-label="<?php esc_attr_e( 'Licensing imagery', 'alpha-solar' ); ?>" data-reveal style="--i:1">
-		<?php if ( $count > 1 ) : ?>
-			<button class="btn-round carousel__btn carousel__btn--prev" type="button" aria-label="<?php esc_attr_e( 'Previous slide', 'alpha-solar' ); ?>" aria-controls="licensing-track">
-				<?php echo ast_chevron_svg(); ?>
-			</button>
-		<?php endif; ?>
+		<?php /* === AST-FIXES-01 L1: always show both arrows (Figma 72:361 / 72:358); aria-disabled with a single slide. === */ ?>
+		<button class="btn-round carousel__btn carousel__btn--prev" type="button" aria-label="<?php esc_attr_e( 'Previous slide', 'alpha-solar' ); ?>" aria-controls="licensing-track"<?php echo $count > 1 ? '' : ' aria-disabled="true"'; ?>>
+			<?php echo ast_chevron_svg(); ?>
+		</button>
 
 		<div class="carousel__viewport" id="licensing-track" tabindex="0">
 			<div class="carousel__track">
@@ -62,15 +61,14 @@ $count  = max( 1, count( $ids ) );
 			</div>
 		</div>
 
-		<?php if ( $count > 1 ) : ?>
-			<button class="btn-round carousel__btn carousel__btn--next" type="button" aria-label="<?php esc_attr_e( 'Next slide', 'alpha-solar' ); ?>" aria-controls="licensing-track">
-				<?php echo ast_chevron_svg(); ?>
-			</button>
-		<?php endif; ?>
+		<button class="btn-round carousel__btn carousel__btn--next" type="button" aria-label="<?php esc_attr_e( 'Next slide', 'alpha-solar' ); ?>" aria-controls="licensing-track"<?php echo $count > 1 ? '' : ' aria-disabled="true"'; ?>>
+			<?php echo ast_chevron_svg(); ?>
+		</button>
+		<?php /* === /AST-FIXES-01 L1 === */ ?>
 	</div>
 
 	<div class="licensing__foot">
-		<p class="licensing__body" data-reveal style="--i:2"><?php echo esc_html( ast_field( 'licensing_body' ) ); ?></p>
+		<div class="licensing__body" data-reveal style="--i:2"><?php echo ast_rich_text( 'licensing_body' ); ?></div>
 		<div data-reveal style="--i:3"><?php echo ast_button( $button, 'dark' ); ?></div>
 	</div>
 </section>

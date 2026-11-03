@@ -14,11 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		$logo_id = 0;
 		if ( function_exists( 'get_field' ) ) {
-			$logo_raw = get_field( 'header_logo', ast_context_id() );
-			$logo_id  = is_array( $logo_raw ) ? (int) ( $logo_raw['ID'] ?? $logo_raw['id'] ?? 0 ) : (int) $logo_raw;
+			$logo_id = ast_attachment_id( get_field( 'header_logo', ast_context_id() ) );
 		}
 		?>
-		<?php if ( $logo_id && wp_get_attachment_image_url( $logo_id, 'full' ) ) : ?>
+		<?php if ( $logo_id && ast_attachment_file_exists( $logo_id ) ) : ?>
 			<a class="site-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
 				<img src="<?php echo esc_url( wp_get_attachment_image_url( $logo_id, 'full' ) ); ?>" width="170" height="54" alt="">
 			</a>

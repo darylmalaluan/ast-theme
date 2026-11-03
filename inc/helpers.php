@@ -76,19 +76,58 @@ function ast_field( $key ) {
 }
 
 /**
- * Heading copy. Editors mark highlights with em.
+ * Heading, eyebrow, and footer copy. Block tags are flattened so the
+ * result can sit inside an existing heading or paragraph.
+ *
+ * @param string $key Field name.
+ * @return string
+ */
+function ast_inline_html( $key ) {
+	$html = trim( ast_field( $key ) );
+	$html = preg_replace( '#</p>\s*<p[^>]*>#i', '<br>', $html );
+	$html = preg_replace( '#</?p[^>]*>#i', '', $html );
+
+	return wp_kses(
+		$html,
+		array(
+			'em'     => array(),
+			'strong' => array(),
+			'b'      => array(),
+			'i'      => array(),
+			'u'      => array(),
+			'br'     => array(),
+			'a'      => array(
+				'href'   => true,
+				'target' => true,
+				'rel'    => true,
+			),
+		)
+	);
+}
+
+/**
+ * Heading copy. Editors mark highlights with italic.
  *
  * @param string $key Field name.
  * @return string
  */
 function ast_highlight( $key ) {
-	return wp_kses(
-		ast_field( $key ),
-		array(
-			'em' => array(),
-			'br' => array(),
-		)
-	);
+	return ast_inline_html( $key );
+}
+
+/**
+ * Body copy. Plain text still gets paragraphs; saved HTML is kept.
+ *
+ * @param string $key Field name.
+ * @return string
+ */
+function ast_rich_text( $key ) {
+	$html = ast_field( $key );
+	if ( ! preg_match( '/<(?:p|br|ul|ol|div|h[1-6]|blockquote)\b/i', $html ) ) {
+		$html = wpautop( $html );
+	}
+
+	return wp_kses_post( $html );
 }
 
 /**
@@ -98,7 +137,7 @@ function ast_highlight( $key ) {
  * @return string
  */
 function ast_text_br( $key ) {
-	return nl2br( esc_html( ast_field( $key ) ), false );
+	return ast_rich_text( $key );
 }
 
 /**
@@ -108,7 +147,7 @@ function ast_text_br( $key ) {
  * @return string
  */
 function ast_paragraphs( $key ) {
-	return wp_kses_post( wpautop( esc_html( ast_field( $key ) ) ) );
+	return ast_rich_text( $key );
 }
 
 /**
@@ -155,7 +194,8 @@ function ast_arrow_svg() {
  * @return string
  */
 function ast_chevron_svg() {
-	return '<svg viewBox="0 0 60 60" width="27" height="14" aria-hidden="true" focusable="false"><path d="M16.43 25.71 L30 39.29 L43.57 25.71" fill="none" stroke="currentColor" stroke-width="4.29" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+	/* === AST-FIXES-01 G1: render the full 60x60 box so the chevron path draws at 27x14 (Figma 72:573). === */
+	return '<svg viewBox="0 0 60 60" width="60" height="60" aria-hidden="true" focusable="false"><path d="M16.43 25.71 L30 39.29 L43.57 25.71" fill="none" stroke="currentColor" stroke-width="4.29" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 }
 
 /**
@@ -213,15 +253,10 @@ function ast_picture( $args ) {
 
 	$id = 0;
 	if ( $args['field'] && function_exists( 'get_field' ) ) {
-		$raw = get_field( $args['field'], ast_context_id() );
-		if ( is_array( $raw ) ) {
-			$id = (int) ( $raw['ID'] ?? $raw['id'] ?? 0 );
-		} else {
-			$id = (int) $raw;
-		}
+		$id = ast_attachment_id( get_field( $args['field'], ast_context_id() ) );
 	}
 
-	if ( $id ) {
+	if ( $id && ast_attachment_file_exists( $id ) ) {
 		$attr = array(
 			'class'    => $args['class'],
 			'loading'  => $args['loading'],
@@ -235,12 +270,6 @@ function ast_picture( $args ) {
 		}
 		$html = wp_get_attachment_image( $id, $args['size'], false, $attr );
 		if ( $html ) {
-			if ( ! $args['decorative'] ) {
-				$alt = trim( (string) get_post_meta( $id, '_wp_attachment_image_alt', true ) );
-				if ( '' === $alt && current_user_can( 'edit_pages' ) ) {
-					$html .= '<span class="ast-admin-note">' . esc_html__( 'Add alt text for this image in the Media Library.', 'alpha-solar' ) . '</span>';
-				}
-			}
 			return $html;
 		}
 	}
@@ -285,9 +314,38 @@ function ast_slide_ids() {
 	}
 
 	for ( $i = 1; $i <= 3; $i++ ) {
-		$ids[] = (int) get_field( 'licensing_slide_' . $i, ast_context_id() );
+		$ids[] = ast_attachment_id( get_field( 'licensing_slide_' . $i, ast_context_id() ) );
 	}
 
 	$ids = array_values( array_unique( array_filter( $ids ) ) );
+	$ids = array_values( array_filter( $ids, 'ast_attachment_file_exists' ) );
 	return $ids;
+}
+
+/**
+ * Image field value as an attachment ID.
+ *
+ * @param mixed $value ACF image value.
+ * @return int
+ */
+function ast_attachment_id( $value ) {
+	if ( is_array( $value ) ) {
+		return (int) ( $value['ID'] ?? $value['id'] ?? 0 );
+	}
+	return (int) $value;
+}
+
+/**
+ * True when the attachment file is actually on this server.
+ *
+ * @param int $id Attachment ID.
+ * @return bool
+ */
+function ast_attachment_file_exists( $id ) {
+	$id = (int) $id;
+	if ( ! $id ) {
+		return false;
+	}
+	$file = get_attached_file( $id );
+	return is_string( $file ) && '' !== $file && file_exists( $file );
 }
