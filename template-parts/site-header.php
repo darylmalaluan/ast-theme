@@ -1,0 +1,47 @@
+<?php
+/**
+ * Header. Logo left, Contact Us pill right. Not sticky.
+ *
+ * @package Alpha_Solar
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+<header class="site-header">
+	<div class="container site-header__bar">
+		<?php
+		$logo_id = 0;
+		if ( function_exists( 'get_field' ) ) {
+			$logo_raw = get_field( 'header_logo', ast_context_id() );
+			$logo_id  = is_array( $logo_raw ) ? (int) ( $logo_raw['ID'] ?? $logo_raw['id'] ?? 0 ) : (int) $logo_raw;
+		}
+		?>
+		<?php if ( $logo_id && wp_get_attachment_image_url( $logo_id, 'full' ) ) : ?>
+			<a class="site-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
+				<img src="<?php echo esc_url( wp_get_attachment_image_url( $logo_id, 'full' ) ); ?>" width="170" height="54" alt="">
+			</a>
+		<?php elseif ( has_custom_logo() ) : ?>
+			<div class="site-header__logo"><?php the_custom_logo(); ?></div>
+		<?php else : ?>
+			<a class="site-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
+				<img src="<?php echo esc_url( AST_URI . '/assets/img/logo-ast.svg' ); ?>" width="170" height="54" alt="">
+			</a>
+		<?php endif; ?>
+
+		<nav class="site-header__nav" aria-label="<?php esc_attr_e( 'Header', 'alpha-solar' ); ?>">
+			<?php
+			wp_nav_menu(
+				array(
+					'theme_location' => 'primary',
+					'depth'          => 1,
+					'container'      => false,
+					'menu_class'     => 'header-cta',
+					'fallback_cb'    => 'ast_primary_menu_fallback',
+				)
+			);
+			?>
+		</nav>
+	</div>
+</header>
