@@ -11,6 +11,7 @@ alwaysApply: false
 - ID names use underscores, never hyphens: `#hero_heading`, `#licensing_track`.
 - Put each `@media` block immediately after the rule it changes, and repeat the full selector inside it. Do not nest `@media` inside a rule, and do not gather breakpoints into one section at the end of the file.
 - Use the same class and id names in markup.
+- Give every text and image content field its own class field and id field. The class field accepts several classes separated by spaces. The id field accepts one id. Append editor classes to the theme class, and leave either field unused when it is empty.
 
 ```css
 .hero-content {

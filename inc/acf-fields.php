@@ -36,7 +36,7 @@ function ast_register_fields() {
 		return;
 	}
 
-	$version  = '2';
+	$version  = '3';
 	$existing = acf_get_field_group( 'group_ast_front_page' );
 	if ( get_option( 'ast_field_group_version' ) === $version && ! empty( $existing['ID'] ) ) {
 		return;
@@ -66,42 +66,65 @@ function ast_front_page_field_group() {
 			'fields'                => array(
 				ast_tab( 'field_ast_tab_header', 'Header' ),
 				ast_image( 'field_ast_header_logo', 'header_logo', 'Logo' ),
+				...ast_class_id_fields( 'field_ast_header_logo', 'header_logo', 'Logo' ),
 				ast_text( 'field_ast_header_cta_label', 'header_cta_label', 'Contact button label', $defaults['header_cta_label'] ),
+				...ast_class_id_fields( 'field_ast_header_cta_label', 'header_cta_label', 'Contact button' ),
 				ast_text( 'field_ast_header_cta_url', 'header_cta_url', 'Contact button link', $defaults['header_cta_url'], 'Use #contact to scroll to the form.' ),
 
 				ast_tab( 'field_ast_tab_hero', 'Hero' ),
 				ast_wysiwyg( 'field_ast_hero_eyebrow', 'hero_eyebrow', 'Eyebrow', $defaults['hero_eyebrow'], 'Italic, bold, and links. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_hero_eyebrow', 'hero_eyebrow', 'Eyebrow' ),
 				ast_wysiwyg( 'field_ast_hero_heading', 'hero_heading', 'Heading', $defaults['hero_heading'], 'Use italic for the highlighted words. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_hero_heading', 'hero_heading', 'Heading' ),
 				ast_wysiwyg( 'field_ast_hero_body', 'hero_body', 'Body', $defaults['hero_body'] ),
+				...ast_class_id_fields( 'field_ast_hero_body', 'hero_body', 'Body' ),
 				ast_image( 'field_ast_hero_bg', 'hero_bg_image', 'Background photo' ),
+				...ast_class_id_fields( 'field_ast_hero_bg', 'hero_bg_image', 'Background photo' ),
 				ast_image( 'field_ast_hero_fg', 'hero_fg_image', 'Building foreground' ),
+				...ast_class_id_fields( 'field_ast_hero_fg', 'hero_fg_image', 'Building foreground' ),
 				ast_image( 'field_ast_hero_band', 'hero_band_image', 'Image band' ),
+				...ast_class_id_fields( 'field_ast_hero_band', 'hero_band_image', 'Image band' ),
 
 				ast_tab( 'field_ast_tab_announce', 'Announcement' ),
 				ast_wysiwyg( 'field_ast_announce_heading', 'announce_heading', 'Heading', $defaults['announce_heading'], 'Use italic for the highlighted words. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_announce_heading', 'announce_heading', 'Heading' ),
 				ast_link_field( 'field_ast_announce_button', 'announce_button', 'Button' ),
+				...ast_class_id_fields( 'field_ast_announce_button', 'announce_button', 'Button' ),
 
 				ast_tab( 'field_ast_tab_business', 'Business model' ),
 				ast_wysiwyg( 'field_ast_business_heading', 'business_heading', 'Heading', $defaults['business_heading'], 'Use italic for the highlighted sentence. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_business_heading', 'business_heading', 'Heading' ),
 				ast_wysiwyg( 'field_ast_business_body', 'business_body', 'Body', $defaults['business_body'] ),
+				...ast_class_id_fields( 'field_ast_business_body', 'business_body', 'Body' ),
 				ast_image( 'field_ast_business_image', 'business_image', 'Image' ),
+				...ast_class_id_fields( 'field_ast_business_image', 'business_image', 'Image' ),
 
 				ast_tab( 'field_ast_tab_licensing', 'Licensing model' ),
 				ast_wysiwyg( 'field_ast_licensing_heading', 'licensing_heading', 'Heading', $defaults['licensing_heading'], 'Use italic for the highlighted phrase. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_licensing_heading', 'licensing_heading', 'Heading' ),
 				ast_image( 'field_ast_slide_1', 'licensing_slide_1', 'Slide 1' ),
+				...ast_class_id_fields( 'field_ast_slide_1', 'licensing_slide_1', 'Slide 1' ),
 				ast_image( 'field_ast_slide_2', 'licensing_slide_2', 'Slide 2' ),
+				...ast_class_id_fields( 'field_ast_slide_2', 'licensing_slide_2', 'Slide 2' ),
 				ast_image( 'field_ast_slide_3', 'licensing_slide_3', 'Slide 3' ),
+				...ast_class_id_fields( 'field_ast_slide_3', 'licensing_slide_3', 'Slide 3' ),
 				ast_wysiwyg( 'field_ast_licensing_body', 'licensing_body', 'Body', $defaults['licensing_body'] ),
+				...ast_class_id_fields( 'field_ast_licensing_body', 'licensing_body', 'Body' ),
 				ast_link_field( 'field_ast_licensing_button', 'licensing_button', 'Button' ),
+				...ast_class_id_fields( 'field_ast_licensing_button', 'licensing_button', 'Button' ),
 
 				ast_tab( 'field_ast_tab_contact', 'Contact' ),
 				ast_wysiwyg( 'field_ast_contact_heading', 'contact_heading', 'Heading', $defaults['contact_heading'], 'Use italic for the highlighted phrase. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_contact_heading', 'contact_heading', 'Heading' ),
 				ast_wysiwyg( 'field_ast_contact_intro', 'contact_intro', 'Intro', $defaults['contact_intro'] ),
+				...ast_class_id_fields( 'field_ast_contact_intro', 'contact_intro', 'Intro' ),
 				ast_text( 'field_ast_contact_shortcode', 'contact_form_shortcode', 'Contact Form 7 shortcode', '', 'Leave empty to use the form created by the theme.' ),
 				ast_text( 'field_ast_contact_privacy', 'contact_privacy_label', 'Privacy button label', $defaults['contact_privacy_label'] ),
+				...ast_class_id_fields( 'field_ast_contact_privacy', 'contact_privacy_label', 'Privacy button' ),
 
 				ast_tab( 'field_ast_tab_footer', 'Footer' ),
 				ast_wysiwyg( 'field_ast_footer_text', 'footer_text', 'Footer text', $defaults['footer_text'], 'Italic, bold, and links. The Text tab accepts HTML.', 'inline' ),
+				...ast_class_id_fields( 'field_ast_footer_text', 'footer_text', 'Footer text' ),
 			),
 			'location'              => array(
 				array(
@@ -120,6 +143,24 @@ function ast_front_page_field_group() {
 			'instruction_placement' => 'label',
 			'active'                => true,
 	);
+}
+
+/**
+ * Class and id inputs for one text or image field.
+ *
+ * @param string $key   Field key prefix.
+ * @param string $name  Content field name.
+ * @param string $label Content label.
+ * @return array<int, array<string, mixed>>
+ */
+function ast_class_id_fields( $key, $name, $label ) {
+	$class = ast_text( $key . '_class', $name . '_class', $label . ' class', '', 'Optional extra classes, separated by spaces. Use hyphens, such as pull-quote.' );
+	$id    = ast_text( $key . '_id', $name . '_id', $label . ' id', '', 'Optional. One id. Use underscores, such as pull_quote.' );
+
+	$class['wrapper'] = array( 'width' => '50' );
+	$id['wrapper']    = array( 'width' => '50' );
+
+	return array( $class, $id );
 }
 
 /**

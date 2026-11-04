@@ -93,7 +93,10 @@ function ast_primary_menu_fallback() {
 		$url = home_url( '/' . $url );
 	}
 
-	echo '<a class="btn btn--cta-sm" href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+	$attrs = function_exists( 'ast_content_attrs' ) ? ast_content_attrs( 'header_cta_label' ) : array( 'class' => '', 'id' => '' );
+	$class = trim( 'btn btn--cta-sm ' . $attrs['class'] );
+	$id    = '' !== $attrs['id'] ? ' id="' . esc_attr( $attrs['id'] ) . '"' : '';
+	echo '<a class="' . esc_attr( $class ) . '"' . $id . ' href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
 }
 
 add_action( 'admin_init', 'ast_hide_front_page_editor' );

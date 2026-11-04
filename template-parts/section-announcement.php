@@ -10,8 +10,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $button = ast_link( 'announce_button', ast_field( 'announce_label' ), '#contact' );
+$button_attrs = ast_content_attrs( 'announce_button' );
 ?>
-<section class="announcement" id="announcement" aria-labelledby="announcement_heading">
+<section class="announcement" id="announcement" aria-labelledby="<?php echo esc_attr( ast_content_id( 'announce_heading', 'announcement_heading' ) ); ?>">
 	<div class="announcement-shade" aria-hidden="true">
 		<div class="hex hex--announce-a"></div>
 		<div class="hex hex--announce-b"></div>
@@ -27,7 +28,8 @@ $button = ast_link( 'announce_button', ast_field( 'announce_label' ), '#contact'
 				'width'   => 1559,
 				'height'  => 435,
 				'alt'     => __( 'Empty floor and a modern architectural passageway', 'alpha-solar' ),
-				'class'   => 'band-img',
+				'class'      => 'band-img',
+				'attr_field' => 'hero_band_image',
 				'loading' => 'lazy',
 			)
 		);
@@ -36,7 +38,7 @@ $button = ast_link( 'announce_button', ast_field( 'announce_label' ), '#contact'
 	</figure>
 
 	<div class="announcement-content">
-		<h2 id="announcement_heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'announce_heading' ); ?></h2>
-		<div data-reveal style="--i:1"><?php echo ast_button( $button, 'primary' ); ?></div>
+		<h2<?php echo ast_attr_html( 'announce_heading', 'h2', 'announcement_heading' ); ?> data-reveal style="--i:0"><?php echo ast_highlight( 'announce_heading' ); ?></h2>
+		<div data-reveal style="--i:1"><?php echo ast_button( $button, 'primary', $button_attrs['class'], $button_attrs['id'] ); ?></div>
 	</div>
 </section>

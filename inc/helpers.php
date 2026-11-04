@@ -76,6 +76,105 @@ function ast_field( $key ) {
 }
 
 /**
+ * Optional class and id saved beside a text or image field.
+ *
+ * Classes use hyphens. A single id uses underscores.
+ *
+ * @param string $name Content field name.
+ * @return array{class: string, id: string}
+ */
+function ast_content_attrs( $name ) {
+	$class = '';
+	$id    = '';
+
+	if ( function_exists( 'get_field' ) ) {
+		$class = ast_sanitize_classes( get_field( $name . '_class', ast_context_id() ) );
+		$id    = ast_sanitize_id( get_field( $name . '_id', ast_context_id() ) );
+	}
+
+	return array(
+		'class' => $class,
+		'id'    => $id,
+	);
+}
+
+/**
+ * @param mixed $value Raw class value.
+ * @return string
+ */
+function ast_sanitize_classes( $value ) {
+	$value  = strtolower( str_replace( '_', '-', (string) $value ) );
+	$tokens = preg_split( '/\s+/', $value );
+	$clean  = array();
+
+	if ( ! is_array( $tokens ) ) {
+		return '';
+	}
+
+	foreach ( $tokens as $token ) {
+		$token = preg_replace( '/[^a-z0-9-]/', '', $token );
+		$token = trim( (string) $token, '-' );
+		if ( '' !== $token && ! preg_match( '/^[0-9]/', $token ) ) {
+			$clean[] = $token;
+		}
+	}
+
+	return implode( ' ', array_unique( $clean ) );
+}
+
+/**
+ * @param mixed $value Raw id value.
+ * @return string
+ */
+function ast_sanitize_id( $value ) {
+	$value = strtolower( trim( str_replace( '-', '_', (string) $value ) ) );
+	$value = preg_replace( '/[^a-z0-9_]/', '', $value );
+	$value = trim( (string) $value, '_' );
+
+	if ( '' === $value || preg_match( '/^[0-9]/', $value ) ) {
+		return '';
+	}
+
+	return $value;
+}
+
+/**
+ * Id that will be rendered, or the theme fallback when the field is empty.
+ *
+ * @param string $name     Content field name.
+ * @param string $fallback Existing id.
+ * @return string
+ */
+function ast_content_id( $name, $fallback = '' ) {
+	$attrs = ast_content_attrs( $name );
+	return '' !== $attrs['id'] ? $attrs['id'] : $fallback;
+}
+
+/**
+ * Class and id attributes. Extra classes are added to the theme class.
+ *
+ * @param string $name       Content field name.
+ * @param string $base_class Theme class names.
+ * @param string $base_id    Theme id.
+ * @return string
+ */
+function ast_attr_html( $name, $base_class = '', $base_id = '' ) {
+	$attrs = ast_content_attrs( $name );
+	$class = trim( $base_class . ' ' . $attrs['class'] );
+	$id    = '' !== $attrs['id'] ? $attrs['id'] : $base_id;
+	$html  = '';
+
+	if ( '' !== $class ) {
+		$html .= ' class="' . esc_attr( $class ) . '"';
+	}
+	if ( '' !== $id ) {
+		$html .= ' id="' . esc_attr( $id ) . '"';
+	}
+
+	return $html;
+}
+
+/**
  * Heading, eyebrow, and footer copy. Block tags are flattened so the
  * result can sit inside an existing heading or paragraph.
  *
@@ -204,13 +303,18 @@ function ast_chevron_svg() {
  * @param array{title: string, url: string, target: string} $link    Link parts.
  * @param string                                            $variant primary|dark|outline.
  * @param string                                            $extra   Extra class names.
+ * @param string                                            $id      Optional element id.
  * @return string
  */
-function ast_button( $link, $variant, $extra = '' ) {
+function ast_button( $link, $variant, $extra = '', $id = '' ) {
 	$class  = trim( 'btn btn--' . $variant . ' ' . $extra );
 	$target = '';
+	$id     = ast_sanitize_id( $id );
 	if ( '_blank' === $link['target'] ) {
 		$target = ' target="_blank" rel="noopener noreferrer"';
+	}
+	if ( '' !== $id ) {
+		$target = ' id="' . esc_attr( $id ) . '"' . $target;
 	}
 
 	$icon = '';
@@ -245,6 +349,8 @@ function ast_picture( $args ) {
 			'height'         => 0,
 			'alt'            => '',
 			'class'          => '',
+			'id'             => '',
+			'attr_field'     => '',
 			'loading'        => 'lazy',
 			'fetchpriority'  => '',
 			'decorative'     => false,
@@ -256,12 +362,23 @@ function ast_picture( $args ) {
 		$id = ast_attachment_id( get_field( $args['field'], ast_context_id() ) );
 	}
 
+	if ( $args['attr_field'] ) {
+		$extra          = ast_content_attrs( $args['attr_field'] );
+		$args['class']  = trim( $args['class'] . ' ' . $extra['class'] );
+		if ( '' !== $extra['id'] ) {
+			$args['id'] = $extra['id'];
+		}
+	}
+
 	if ( $id && ast_attachment_file_exists( $id ) ) {
 		$attr = array(
 			'class'    => $args['class'],
 			'loading'  => $args['loading'],
 			'decoding' => 'async',
 		);
+		if ( $args['id'] ) {
+			$attr['id'] = $args['id'];
+		}
 		if ( $args['fetchpriority'] ) {
 			$attr['fetchpriority'] = $args['fetchpriority'];
 		}
@@ -277,13 +394,14 @@ function ast_picture( $args ) {
 	$src  = AST_URI . '/assets/img/' . ltrim( (string) $args['file'], '/' );
 	$alt  = $args['decorative'] ? '' : (string) $args['alt'];
 	$html = sprintf(
-		'<img src="%1$s" alt="%2$s" width="%3$d" height="%4$d" class="%5$s" loading="%6$s" decoding="async"%7$s%8$s>',
+		'<img src="%1$s" alt="%2$s" width="%3$d" height="%4$d" class="%5$s" loading="%6$s" decoding="async"%7$s%8$s%9$s>',
 		esc_url( $src ),
 		esc_attr( $alt ),
 		(int) $args['width'],
 		(int) $args['height'],
 		esc_attr( $args['class'] ),
 		esc_attr( $args['loading'] ),
+		$args['id'] ? ' id="' . esc_attr( $args['id'] ) . '"' : '',
 		$args['fetchpriority'] ? ' fetchpriority="' . esc_attr( $args['fetchpriority'] ) . '"' : '',
 		$args['decorative'] ? ' aria-hidden="true"' : ''
 	);
@@ -297,29 +415,59 @@ function ast_picture( $args ) {
  * @return int[]
  */
 function ast_slide_ids() {
+	$ids = array();
+	foreach ( ast_licensing_slides() as $slide ) {
+		$ids[] = (int) $slide['id'];
+	}
+	return $ids;
+}
+
+/**
+ * Licensing slides, with the image field that can supply a class and id.
+ *
+ * @return array<int, array{id: int, field: string}>
+ */
+function ast_licensing_slides() {
 	if ( ! function_exists( 'get_field' ) ) {
 		return array();
 	}
 
-	$ids     = array();
-	$gallery = get_field( 'licensing_slides', ast_context_id() );
-	if ( is_array( $gallery ) ) {
-		foreach ( $gallery as $item ) {
-			if ( is_array( $item ) ) {
-				$ids[] = (int) ( $item['ID'] ?? $item['id'] ?? 0 );
-			} else {
-				$ids[] = (int) $item;
-			}
+	$field_ids = array();
+	for ( $i = 1; $i <= 3; $i++ ) {
+		$field = 'licensing_slide_' . $i;
+		$id    = ast_attachment_id( get_field( $field, ast_context_id() ) );
+		if ( $id && ast_attachment_file_exists( $id ) ) {
+			$field_ids[ $id ] = $field;
 		}
 	}
 
-	for ( $i = 1; $i <= 3; $i++ ) {
-		$ids[] = ast_attachment_id( get_field( 'licensing_slide_' . $i, ast_context_id() ) );
+	$slides = array();
+	$seen   = array();
+	$add    = function ( $id, $field ) use ( &$slides, &$seen ) {
+		$id = (int) $id;
+		if ( ! $id || isset( $seen[ $id ] ) || ! ast_attachment_file_exists( $id ) ) {
+			return;
+		}
+		$slides[]   = array(
+			'id'    => $id,
+			'field' => $field,
+		);
+		$seen[ $id ] = true;
+	};
+
+	$gallery = get_field( 'licensing_slides', ast_context_id() );
+	if ( is_array( $gallery ) ) {
+		foreach ( $gallery as $item ) {
+			$id = ast_attachment_id( $item );
+			$add( $id, $field_ids[ $id ] ?? '' );
+		}
 	}
 
-	$ids = array_values( array_unique( array_filter( $ids ) ) );
-	$ids = array_values( array_filter( $ids, 'ast_attachment_file_exists' ) );
-	return $ids;
+	foreach ( $field_ids as $id => $field ) {
+		$add( $id, $field );
+	}
+
+	return $slides;
 }
 
 /**

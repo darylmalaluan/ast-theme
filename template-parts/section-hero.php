@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<section class="hero" aria-labelledby="hero_heading">
+<section class="hero" aria-labelledby="<?php echo esc_attr( ast_content_id( 'hero_heading', 'hero_heading' ) ); ?>">
 	<div class="hero-media" aria-hidden="true">
 		<?php
 		echo ast_picture(
@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'width'         => 1920,
 				'height'        => 1234,
 				'class'         => 'hero-bg',
+				'attr_field'    => 'hero_bg_image',
 				'loading'       => 'eager',
 				'fetchpriority' => 'high',
 				'decorative'    => true,
@@ -38,6 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'width'         => 1920,
 				'height'        => 1234,
 				'class'         => 'hero-fg',
+				'attr_field'    => 'hero_fg_image',
 				'loading'       => 'eager',
 				'fetchpriority' => 'high',
 				'decorative'    => true,
@@ -48,9 +50,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="container hero-content">
-		<p class="hero-eyebrow" data-reveal data-reveal-on="load" style="--i:0"><?php echo ast_inline_html( 'hero_eyebrow' ); ?></p>
-		<h1 id="hero_heading"><?php echo ast_highlight( 'hero_heading' ); ?></h1>
-		<div class="hero-body" data-reveal data-reveal-on="load" style="--i:1"><?php echo ast_rich_text( 'hero_body' ); ?></div>
+		<p<?php echo ast_attr_html( 'hero_eyebrow', 'hero-eyebrow' ); ?> data-reveal data-reveal-on="load" style="--i:0"><?php echo ast_inline_html( 'hero_eyebrow' ); ?></p>
+		<h1<?php echo ast_attr_html( 'hero_heading', '', 'hero_heading' ); ?>><?php echo ast_highlight( 'hero_heading' ); ?></h1>
+		<div<?php echo ast_attr_html( 'hero_body', 'hero-body' ); ?> data-reveal data-reveal-on="load" style="--i:1"><?php echo ast_rich_text( 'hero_body' ); ?></div>
 		<a class="btn-round hero-scroll" href="#announcement" aria-label="<?php esc_attr_e( 'Scroll to next section', 'alpha-solar' ); ?>" data-reveal data-reveal-on="load" style="--i:2">
 			<?php echo ast_chevron_svg(); ?>
 		</a>

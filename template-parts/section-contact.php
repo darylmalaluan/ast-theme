@@ -14,18 +14,19 @@ $privacy   = get_privacy_policy_url();
 if ( ! $privacy ) {
 	$privacy = home_url( '/' );
 }
-$label = ast_field( 'contact_privacy_label' );
+$label         = ast_field( 'contact_privacy_label' );
+$privacy_attrs = ast_content_attrs( 'contact_privacy_label' );
 $status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry'] ) ) : '';
 ?>
-<section class="contact ast-contact" id="contact" aria-labelledby="contact_heading">
+<section class="contact ast-contact" id="contact" aria-labelledby="<?php echo esc_attr( ast_content_id( 'contact_heading', 'contact_heading' ) ); ?>">
 	<div class="contact-shade" aria-hidden="true">
 		<div class="hex hex--contact-a"></div>
 		<div class="hex hex--contact-b"></div>
 	</div>
 
 	<div class="contact-intro">
-		<h2 id="contact_heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'contact_heading' ); ?></h2>
-		<div class="contact-lead" data-reveal style="--i:1"><?php echo ast_rich_text( 'contact_intro' ); ?></div>
+		<h2<?php echo ast_attr_html( 'contact_heading', 'h2', 'contact_heading' ); ?> data-reveal style="--i:0"><?php echo ast_highlight( 'contact_heading' ); ?></h2>
+		<div<?php echo ast_attr_html( 'contact_intro', 'contact-lead' ); ?> data-reveal style="--i:1"><?php echo ast_rich_text( 'contact_intro' ); ?></div>
 	</div>
 
 	<div class="contact-form" data-reveal style="--i:2">
@@ -64,7 +65,7 @@ $status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry']
 						<span class="btn-label"><?php esc_html_e( 'Enquire about investment', 'alpha-solar' ); ?></span>
 						<span class="btn-icon" aria-hidden="true"><?php echo ast_arrow_svg(); ?></span>
 					</button>
-					<a class="btn btn--outline" href="<?php echo esc_url( $privacy ); ?>"><?php echo esc_html( $label ); ?></a>
+					<a class="<?php echo esc_attr( trim( 'btn btn--outline ' . $privacy_attrs['class'] ) ); ?>"<?php echo '' !== $privacy_attrs['id'] ? ' id="' . esc_attr( $privacy_attrs['id'] ) . '"' : ''; ?> href="<?php echo esc_url( $privacy ); ?>"><?php echo esc_html( $label ); ?></a>
 				</div>
 			</form>
 		<?php endif; ?>

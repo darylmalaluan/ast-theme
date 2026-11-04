@@ -37,7 +37,26 @@ function ast_cf7_privacy_url( $content ) {
 	if ( ! $url ) {
 		$url = home_url( '/' );
 	}
-	return str_replace( '%%privacy_url%%', esc_url( $url ), $content );
+	$content = str_replace( '%%privacy_url%%', esc_url( $url ), $content );
+
+	if ( ! function_exists( 'ast_content_attrs' ) ) {
+		return $content;
+	}
+
+	$attrs = ast_content_attrs( 'contact_privacy_label' );
+	if ( '' === $attrs['class'] && '' === $attrs['id'] ) {
+		return $content;
+	}
+
+	$class = trim( 'btn btn--outline ' . $attrs['class'] );
+	$id    = '' !== $attrs['id'] ? ' id="' . esc_attr( $attrs['id'] ) . '"' : '';
+
+	return preg_replace(
+		'/class="btn btn--outline"/',
+		$id . ' class="' . esc_attr( $class ) . '"',
+		$content,
+		1
+	);
 }
 
 add_action( 'init', 'ast_ensure_cf7_form', 20 );
