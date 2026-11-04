@@ -75,7 +75,7 @@ add_filter( 'nav_menu_css_class', 'ast_primary_menu_item_class', 10, 3 );
  */
 function ast_primary_menu_item_class( $classes, $item, $args ) {
 	if ( isset( $args->theme_location ) && 'primary' === $args->theme_location ) {
-		$classes[] = 'header-cta__item';
+		$classes[] = 'header-cta-item';
 	}
 	return $classes;
 }

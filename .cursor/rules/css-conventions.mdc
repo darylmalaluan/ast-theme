@@ -1,0 +1,32 @@
+---
+description: CSS property order, class and id naming, and colocated media queries
+globs: "**/*.{css,scss,php,js,html}"
+alwaysApply: false
+---
+
+# CSS style
+
+- Sort declarations in each rule alphabetically by property name. Keep a comment with the declaration it describes.
+- Class names use hyphens, never underscores: `.hero-body`, `.site-footer-text`, `.btn--primary`.
+- ID names use underscores, never hyphens: `#hero_heading`, `#licensing_track`.
+- Put each `@media` block immediately after the rule it changes, and repeat the full selector inside it. Do not nest `@media` inside a rule, and do not gather breakpoints into one section at the end of the file.
+- Use the same class and id names in markup.
+
+```css
+.hero-content {
+	padding-bottom: 180px;
+	padding-top: 342px;
+	position: relative;
+}
+
+@media (max-width: 767px) {
+	.hero-content {
+		padding-bottom: 64px;
+		padding-top: 148px;
+	}
+}
+
+#hero_heading {
+	margin-top: 27px;
+}
+```

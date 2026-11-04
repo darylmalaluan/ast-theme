@@ -215,11 +215,11 @@ function ast_button( $link, $variant, $extra = '' ) {
 
 	$icon = '';
 	if ( 'outline' !== $variant ) {
-		$icon = '<span class="btn__icon" aria-hidden="true">' . ast_arrow_svg() . '</span>';
+		$icon = '<span class="btn-icon" aria-hidden="true">' . ast_arrow_svg() . '</span>';
 	}
 
 	return sprintf(
-		'<a class="%1$s" href="%2$s"%3$s><span class="btn__label">%4$s</span>%5$s</a>',
+		'<a class="%1$s" href="%2$s"%3$s><span class="btn-label">%4$s</span>%5$s</a>',
 		esc_attr( $class ),
 		esc_url( $link['url'] ),
 		$target,

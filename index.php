@@ -18,8 +18,8 @@ get_header();
 			while ( have_posts() ) :
 				the_post();
 				?>
-				<article <?php post_class( 'default-page__article' ); ?>>
-					<h1 class="default-page__title"><?php the_title(); ?></h1>
+				<article <?php post_class( 'default-page-article' ); ?>>
+					<h1 class="default-page-title"><?php the_title(); ?></h1>
 					<div class="entry-content"><?php the_content(); ?></div>
 				</article>
 			<?php endwhile; ?>

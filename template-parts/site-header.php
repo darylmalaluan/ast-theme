@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <header class="site-header">
-	<div class="container site-header__bar">
+	<div class="container site-header-bar">
 		<?php
 		$logo_id = 0;
 		if ( function_exists( 'get_field' ) ) {
@@ -18,18 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 		<?php if ( $logo_id && ast_attachment_file_exists( $logo_id ) ) : ?>
-			<a class="site-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
+			<a class="site-header-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
 				<img src="<?php echo esc_url( wp_get_attachment_image_url( $logo_id, 'full' ) ); ?>" width="170" height="54" alt="">
 			</a>
 		<?php elseif ( has_custom_logo() ) : ?>
-			<div class="site-header__logo"><?php the_custom_logo(); ?></div>
+			<div class="site-header-logo"><?php the_custom_logo(); ?></div>
 		<?php else : ?>
-			<a class="site-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
+			<a class="site-header-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Alpha Solar Technologies — home', 'alpha-solar' ); ?>">
 				<img src="<?php echo esc_url( AST_URI . '/assets/img/logo-ast.svg' ); ?>" width="170" height="54" alt="">
 			</a>
 		<?php endif; ?>
 
-		<nav class="site-header__nav" aria-label="<?php esc_attr_e( 'Header', 'alpha-solar' ); ?>">
+		<nav class="site-header-nav" aria-label="<?php esc_attr_e( 'Header', 'alpha-solar' ); ?>">
 			<?php
 			wp_nav_menu(
 				array(

@@ -42,10 +42,10 @@
 	}
 
 	document.querySelectorAll("[data-carousel]").forEach(function (carousel) {
-		var track = carousel.querySelector(".carousel__track");
-		var slides = carousel.querySelectorAll(".carousel__slide");
-		var prev = carousel.querySelector(".carousel__btn--prev");
-		var next = carousel.querySelector(".carousel__btn--next");
+		var track = carousel.querySelector(".carousel-track");
+		var slides = carousel.querySelectorAll(".carousel-slide");
+		var prev = carousel.querySelector(".carousel-btn--prev");
+		var next = carousel.querySelector(".carousel-btn--next");
 		if (!track || slides.length < 2 || !prev || !next) {
 			return;
 		}

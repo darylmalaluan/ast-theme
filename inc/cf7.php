@@ -203,17 +203,17 @@ function ast_cf7_merge_flamingo_settings( $existing ) {
  */
 function ast_cf7_markup() {
 	return <<<'FORM'
-<div class="ast-form__row ast-form__row--2">
-<p class="ast-field"><label for="ast-name" class="screen-reader-text">Full name (required)</label>
-[text* full-name id:ast-name autocomplete:name maxlength:100 placeholder "Full name"]</p>
-<p class="ast-field"><label for="ast-email" class="screen-reader-text">Email address (required)</label>
-[email* email-address id:ast-email autocomplete:email placeholder "Email address"]</p>
+<div class="ast-form-row ast-form-row--2">
+<p class="ast-field"><label for="ast_name" class="screen-reader-text">Full name (required)</label>
+[text* full-name id:ast_name autocomplete:name maxlength:100 placeholder "Full name"]</p>
+<p class="ast-field"><label for="ast_email" class="screen-reader-text">Email address (required)</label>
+[email* email-address id:ast_email autocomplete:email placeholder "Email address"]</p>
 </div>
-<p class="ast-field"><label for="ast-company" class="screen-reader-text">Company or organisation (optional)</label>
-[text company id:ast-company autocomplete:organization maxlength:150 placeholder "Company or organisation (optional)"]</p>
-<p class="ast-field ast-field--textarea"><label for="ast-enquiry" class="screen-reader-text">Your enquiry (required)</label>
-[textarea* enquiry id:ast-enquiry maxlength:2000 placeholder "Your enquiry"]</p>
-<div class="ast-form__actions">
+<p class="ast-field"><label for="ast_company" class="screen-reader-text">Company or organisation (optional)</label>
+[text company id:ast_company autocomplete:organization maxlength:150 placeholder "Company or organisation (optional)"]</p>
+<p class="ast-field ast-field--textarea"><label for="ast_enquiry" class="screen-reader-text">Your enquiry (required)</label>
+[textarea* enquiry id:ast_enquiry maxlength:2000 placeholder "Your enquiry"]</p>
+<div class="ast-form-actions">
 <span class="ast-submit">[submit class:btn class:btn--primary "Enquire about investment"]<span class="ast-sending screen-reader-text">Sending…</span></span>
 <a class="btn btn--outline" href="%%privacy_url%%">Privacy policy</a>
 </div>

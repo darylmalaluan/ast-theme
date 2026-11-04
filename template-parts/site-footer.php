@@ -10,10 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <footer class="site-footer">
-	<div class="container site-footer__bar">
-		<p class="site-footer__text"><?php echo ast_inline_html( 'footer_text' ); ?></p>
+	<div class="container site-footer-bar">
+		<p class="site-footer-text"><?php echo ast_inline_html( 'footer_text' ); ?></p>
 		<?php if ( has_nav_menu( 'footer' ) ) : ?>
-			<nav class="site-footer__nav" aria-label="<?php esc_attr_e( 'Footer', 'alpha-solar' ); ?>">
+			<nav class="site-footer-nav" aria-label="<?php esc_attr_e( 'Footer', 'alpha-solar' ); ?>">
 				<?php
 				wp_nav_menu(
 					array(

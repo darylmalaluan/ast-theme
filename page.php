@@ -16,9 +16,9 @@ get_header();
 	while ( have_posts() ) :
 		the_post();
 		?>
-		<article <?php post_class( 'default-page__article container' ); ?>>
-			<h1 class="default-page__title"><?php the_title(); ?></h1>
-			<div class="default-page__content entry-content">
+		<article <?php post_class( 'default-page-article container' ); ?>>
+			<h1 class="default-page-title"><?php the_title(); ?></h1>
+			<div class="default-page-content entry-content">
 				<?php the_content(); ?>
 			</div>
 		</article>

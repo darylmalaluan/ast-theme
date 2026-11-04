@@ -17,18 +17,18 @@ if ( ! $privacy ) {
 $label = ast_field( 'contact_privacy_label' );
 $status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry'] ) ) : '';
 ?>
-<section class="contact ast-contact" id="contact" aria-labelledby="contact-heading">
-	<div class="contact__shade" aria-hidden="true">
+<section class="contact ast-contact" id="contact" aria-labelledby="contact_heading">
+	<div class="contact-shade" aria-hidden="true">
 		<div class="hex hex--contact-a"></div>
 		<div class="hex hex--contact-b"></div>
 	</div>
 
-	<div class="contact__intro">
-		<h2 id="contact-heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'contact_heading' ); ?></h2>
-		<div class="contact__lead" data-reveal style="--i:1"><?php echo ast_rich_text( 'contact_intro' ); ?></div>
+	<div class="contact-intro">
+		<h2 id="contact_heading" class="h2" data-reveal style="--i:0"><?php echo ast_highlight( 'contact_heading' ); ?></h2>
+		<div class="contact-lead" data-reveal style="--i:1"><?php echo ast_rich_text( 'contact_intro' ); ?></div>
 	</div>
 
-	<div class="contact__form" data-reveal style="--i:2">
+	<div class="contact-form" data-reveal style="--i:2">
 		<?php if ( $shortcode && shortcode_exists( 'contact-form-7' ) ) : ?>
 			<?php echo do_shortcode( $shortcode ); ?>
 		<?php else : ?>
@@ -41,28 +41,28 @@ $status = isset( $_GET['enquiry'] ) ? sanitize_key( wp_unslash( $_GET['enquiry']
 				<p class="ast-hp" aria-hidden="true">
 					<label>Website <input type="text" name="ast_company_website" tabindex="-1" autocomplete="off"></label>
 				</p>
-				<div class="ast-form__row ast-form__row--2">
+				<div class="ast-form-row ast-form-row--2">
 					<p class="ast-field">
-						<label for="ast-name" class="screen-reader-text"><?php esc_html_e( 'Full name (required)', 'alpha-solar' ); ?></label>
-						<input id="ast-name" name="full-name" type="text" autocomplete="name" maxlength="100" placeholder="<?php esc_attr_e( 'Full name', 'alpha-solar' ); ?>" required>
+						<label for="ast_name" class="screen-reader-text"><?php esc_html_e( 'Full name (required)', 'alpha-solar' ); ?></label>
+						<input id="ast_name" name="full-name" type="text" autocomplete="name" maxlength="100" placeholder="<?php esc_attr_e( 'Full name', 'alpha-solar' ); ?>" required>
 					</p>
 					<p class="ast-field">
-						<label for="ast-email" class="screen-reader-text"><?php esc_html_e( 'Email address (required)', 'alpha-solar' ); ?></label>
-						<input id="ast-email" name="email-address" type="email" autocomplete="email" placeholder="<?php esc_attr_e( 'Email address', 'alpha-solar' ); ?>" required>
+						<label for="ast_email" class="screen-reader-text"><?php esc_html_e( 'Email address (required)', 'alpha-solar' ); ?></label>
+						<input id="ast_email" name="email-address" type="email" autocomplete="email" placeholder="<?php esc_attr_e( 'Email address', 'alpha-solar' ); ?>" required>
 					</p>
 				</div>
 				<p class="ast-field">
-					<label for="ast-company" class="screen-reader-text"><?php esc_html_e( 'Company or organisation (optional)', 'alpha-solar' ); ?></label>
-					<input id="ast-company" name="company" type="text" autocomplete="organization" maxlength="150" placeholder="<?php esc_attr_e( 'Company or organisation (optional)', 'alpha-solar' ); ?>">
+					<label for="ast_company" class="screen-reader-text"><?php esc_html_e( 'Company or organisation (optional)', 'alpha-solar' ); ?></label>
+					<input id="ast_company" name="company" type="text" autocomplete="organization" maxlength="150" placeholder="<?php esc_attr_e( 'Company or organisation (optional)', 'alpha-solar' ); ?>">
 				</p>
 				<p class="ast-field ast-field--textarea">
-					<label for="ast-enquiry" class="screen-reader-text"><?php esc_html_e( 'Your enquiry (required)', 'alpha-solar' ); ?></label>
-					<textarea id="ast-enquiry" name="enquiry" maxlength="2000" placeholder="<?php esc_attr_e( 'Your enquiry', 'alpha-solar' ); ?>" required></textarea>
+					<label for="ast_enquiry" class="screen-reader-text"><?php esc_html_e( 'Your enquiry (required)', 'alpha-solar' ); ?></label>
+					<textarea id="ast_enquiry" name="enquiry" maxlength="2000" placeholder="<?php esc_attr_e( 'Your enquiry', 'alpha-solar' ); ?>" required></textarea>
 				</p>
-				<div class="ast-form__actions">
+				<div class="ast-form-actions">
 					<button class="btn btn--primary" type="submit">
-						<span class="btn__label"><?php esc_html_e( 'Enquire about investment', 'alpha-solar' ); ?></span>
-						<span class="btn__icon" aria-hidden="true"><?php echo ast_arrow_svg(); ?></span>
+						<span class="btn-label"><?php esc_html_e( 'Enquire about investment', 'alpha-solar' ); ?></span>
+						<span class="btn-icon" aria-hidden="true"><?php echo ast_arrow_svg(); ?></span>
 					</button>
 					<a class="btn btn--outline" href="<?php echo esc_url( $privacy ); ?>"><?php echo esc_html( $label ); ?></a>
 				</div>
