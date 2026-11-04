@@ -289,6 +289,9 @@ a {
 }
 
 .btn--outline {
+	display: none;
+	visibility: hidden;
+	
 	justify-content: center;
 	width: 239px;
 	max-width: 100%;
@@ -315,7 +318,7 @@ a {
 	border-radius: 9999px;
 	text-decoration: none;
 	text-transform: none;
-	font-weight: 500;
+	font-weight: 600;
 	font-size: 16px;
 	line-height: 15px;
 	letter-spacing: -0.2px;
@@ -976,17 +979,28 @@ a {
 .ast-contact input[type="email"],
 .ast-form input[type="text"],
 .ast-form input[type="email"] {
-	height: 69px;
-	padding: 0 31px;
+	height: auto;
+	padding: 20px
 }
-
 .ast-contact textarea,
 .ast-form textarea {
 	height: 322px;
 	min-height: 200px;
-	padding: 31px;
+	padding: 20px;
 	resize: vertical;
 }
+	@media (max-width: 767px) {
+		.ast-contact input[type="text"],
+		.ast-contact input[type="email"],
+		.ast-contact textarea,
+		.ast-form input[type="text"],
+		.ast-form input[type="email"],
+		.ast-form textarea {
+			font-size: 14px;
+			padding: 10px;
+		}
+	}
+
 
 .ast-contact input::placeholder,
 .ast-contact textarea::placeholder,
@@ -1074,6 +1088,11 @@ a {
 	cursor: pointer;
 	appearance: none;
 }
+	@media (max-width: 767px) {
+		.ast-submit input.wpcf7-submit {
+			font-size: 14px;
+		}
+	}
 
 .ast-submit input.wpcf7-submit:hover {
 	background: var(--c-yellow-hover);
@@ -1302,7 +1321,7 @@ a {
 	}
 
 	.btn {
-		font-size: 14px;
+		font-size: 12px;
 	}
 
 	.btn--dark {
@@ -1439,7 +1458,7 @@ a {
 	}
 
 	.site-footer__text {
-		font-size: 16px;
+		font-size: 14px;
 	}
 
 	.hex {
